@@ -30,6 +30,8 @@ handleKeyPress(keyEvent evt)
       state.toggleOptionMenu();
       if (state.optionMenu == false) {
         note1.toggleOptionMenu();
+      } else {
+        setTileColor(note1.octave - 1, green);
       }
     }
     if (state.optionMenu == true && key > 0 && key < 8) {
