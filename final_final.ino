@@ -15,7 +15,7 @@ private:
 
 /* BEGIN GLOBALS */
 AppState state = AppState();
-NoteFunction note1 = NoteFunction(1, 6, 2);
+NoteFunction note1 = NoteFunction(1, 6, 3);
 /* END GLOBALS */
 
 // define a callback for key presses
@@ -28,6 +28,9 @@ handleKeyPress(keyEvent evt)
     state.keysPressed[key] = true;
     if (state.keysPressed[0] == true && state.keysPressed[15] == true) {
       state.toggleOptionMenu();
+      if (state.optionMenu == false) {
+        note1.toggleOptionMenu();
+      }
     }
     if (state.optionMenu == true && key > 0 && key < 8) {
       if (key + 1 != note1.octave) {
@@ -35,6 +38,8 @@ handleKeyPress(keyEvent evt)
         note1.octave = key + 1;
       }
       setTileColor(note1.octave - 1, green);
+    } else if (state.optionMenu == false) {
+      note1.toggleKey(key);
     }
   } else if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING) {
     uint8_t key = getIndexFromKey(evt.reg + 1);

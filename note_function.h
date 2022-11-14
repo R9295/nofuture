@@ -31,10 +31,17 @@ public:
     }
     this->octave = octave;
   }
+  void toggleOptionMenu()
+  {
+    for (uint8_t i = 0; i < 16; i++) {
+      setTileColor(i, this->seq[i] == 0 ? 0x000000 : blue);
+    }
+  }
   void setIndexPlaying()
   {
     setTileColor(this->index, green);
-    setTileColor(this->index > 0 ? this->index - 1 : 15, blue);
+    uint8_t key = this->index > 0 ? this->index - 1 : 15;
+    setTileColor(key, this->seq[key] == 0 ? 0x000000 : blue);
   }
   void pulse(AppState* appState)
   {
@@ -57,6 +64,13 @@ public:
         this->index++;
       }
     }
+  }
+  void toggleKey(uint8_t key)
+  {
+    Serial.println(key);
+    uint8_t value = this->seq[key];
+    this->seq[key] = value == 0 ? 1 : 0;
+    setTileColor(key, value == 0 ? blue : 0x000000);
   }
   uint8_t getRandomNumber(uint8_t min_, uint8_t max_)
   {
