@@ -1,7 +1,7 @@
 #ifndef AppState_h
 #define AppState_h
 #include "midi.h"
-
+#include "trellis.h"
 class AppState
 {
 public:
@@ -30,6 +30,13 @@ public:
   {
     this->pulses = 0;
     this->bars = 1;
+  }
+  void toggleOptionMenu() {
+    this->optionMenu = !this->optionMenu;
+    if (this->optionMenu == true) {
+      setTileColorRanged(0, 7, 5184848);
+      setTileColorRanged(8, 15, 13269299);
+    }
   }
 };
 #endif

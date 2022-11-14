@@ -19,6 +19,15 @@ clearTile(uint16_t tileId)
 }
 
 void
+setTileColorRanged(uint8_t start_, uint8_t end_, uint32_t color)
+{
+  for (uint16_t i = start_; i < end_ + 1; i++) {
+    trellis.pixels.setPixelColor(i, color);
+    trellis.pixels.show();
+  }
+}
+
+void
 clearBoard()
 {
   for (uint16_t i = 0; i < trellis.pixels.numPixels(); i++) {

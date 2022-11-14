@@ -27,7 +27,7 @@ handleKeyPress(keyEvent evt)
     uint8_t key = getIndexFromKey(evt.reg);
     state.keysPressed[key] = true;
     if (state.keysPressed[0] == true && state.keysPressed[15] == true) {
-      state.optionMenu = !state.optionMenu;
+      state.toggleOptionMenu();
     }
   } else if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING) {
     uint8_t key = getIndexFromKey(evt.reg + 1);
