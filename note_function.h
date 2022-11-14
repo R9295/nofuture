@@ -1,6 +1,7 @@
 #ifndef NoteFunction_h
 #define NoteFunction_h
 #include "state.h"
+#include "trellis.h"
 #include <usbmidi.h>
 char notes[12][3] = { "c",  "c#", "d",  "d#", "e",  "f",
                       "f#", "g",  "g#", "a",  "a#", "b" };
@@ -30,11 +31,16 @@ public:
     }
     this->octave = octave;
   }
-
+  void setIndexPlaying()
+  {
+    setTileColor(this->index, green);
+    setTileColor(this->index > 0 ? this->index - 1 : 15, blue);
+  }
   void pulse(AppState* appState)
   {
     if (appState->pulses % this->every == 0) {
       // this->note_len--;
+      setIndexPlaying();
       if (this->seq[this->index] == 1 /*&& this->note_len == 0*/) {
         this->note = getRandomNote();
         // this->note_len = lengths[getRandomNumber(0, 5)];
@@ -155,5 +161,6 @@ public:
     USBMIDI.write(val);
     USBMIDI.flush();
   }
+  void clean() { this->index = 0; }
 };
 #endif
