@@ -1,5 +1,7 @@
 #ifndef NoteFunction_h
 #define NoteFunction_h
+#include "state.h"
+#include <usbmidi.h>
 char notes[12][3] = { "c",  "c#", "d",  "d#", "e",  "f",
                       "f#", "g",  "g#", "a",  "a#", "b" };
 class NoteFunction
@@ -26,11 +28,11 @@ public:
     this->octave = octave;
   }
 
-  void pulse(APPState* appState)
+  void pulse(AppState* appState)
   {
     if (appState->pulses % this->every == 0) {
       if (this->seq[this->index] == 1) {
-        this->note = getRandomNote(this->octave);
+        this->note = getRandomNote();
         sendNoteOff(this->channel, this->prevNote);
         sendNoteOn(this->channel, this->note, 127);
         this->prevNote = this->note;
@@ -47,9 +49,10 @@ public:
     return random(min_, max_);
   }
 
-  uint8_t getRandomNote(uint8_t octave)
+  uint8_t getRandomNote()
   {
-    uint8_t plusOneOctave = random(octave, octave == 8 ? 8 : octave + 2);
+    uint8_t plusOneOctave =
+      random(this->octave, this->octave == 8 ? 8 : this->octave + 2);
     return getNote(plusOneOctave, notes[getRandomNumber(0, 12)]);
   }
   uint8_t getNote(uint8_t octave, char* note)
@@ -108,40 +111,40 @@ public:
     Serial.println(octave);
     return base + (12 * octave);
   }
-  uint8_t getNoteOn(uint8_t channel)
+  uint8_t getNoteOn()
   {
     // assert channel <= 15;
-    return 144 + channel;
+    return 144 + this->channel;
   }
 
-  uint8_t getNoteOff(uint8_t channel)
+  uint8_t getNoteOff()
   {
     // assert channel <= 15;
-    return 128 + channel;
+    return 128 + this->channel;
   }
-  uint8_t getCCChange(uint8_t channel)
+  uint8_t getCCChange()
   {
     // assert channel <= 15;
-    return 176 + channel;
+    return 176 + this->channel;
   }
 
   void sendNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
   {
-    USBMIDI.write(getNoteOn(channel));
+    USBMIDI.write(getNoteOn());
     USBMIDI.write(note);
     USBMIDI.write(velocity);
     USBMIDI.flush();
   }
   void sendNoteOff(uint8_t channel, uint8_t note)
   {
-    USBMIDI.write(getNoteOff(channel));
+    USBMIDI.write(getNoteOff());
     USBMIDI.write(note);
     USBMIDI.write(0); // velocity
     USBMIDI.flush();
   }
   void sendCCChange(uint8_t channel, uint8_t control, uint8_t val)
   {
-    USBMIDI.write(getCCChange(channel));
+    USBMIDI.write(getCCChange());
     USBMIDI.write(control);
     USBMIDI.write(val);
     USBMIDI.flush();

@@ -4,11 +4,6 @@
 #include "trellis.h"
 #include <usbmidi.h>
 
-/* BEGIN STATE DECLARATIONS */
-APPState st = { 0, 1, 0 };
-APPState* state = &st;
-///* END STATE DECLARATIONS */
-
 class HitFunction
 {
 private:
@@ -19,7 +14,8 @@ private:
 };
 
 /* BEGIN GLOBALS */
-NoteFunction note1 = NoteFunction(1, 6, 2);
+AppState state = AppState();
+NoteFunction note1 = NoteFunction(1, 6, 4);
 /* END GLOBALS */
 
 void
@@ -46,15 +42,10 @@ loop()
   while (USBMIDI.available()) {
     u8 msg = USBMIDI.read();
     if (msg == CLOCK_MSG) {
-      state->pulses++;
-      note1.pulse(state);
-      if (state->pulses == PULSES_IN_BAR) {
-        state->bars++;
-        state->pulses = 0;
-      }
+      state.pulse();
+      note1.pulse(&state);
     } else if (msg == STOP_MSG) {
-      state->bars = 1;
-      state->pulses = 0;
+      state.clean();
     }
   }
 }
