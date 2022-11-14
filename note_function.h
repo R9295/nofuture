@@ -14,11 +14,11 @@ private:
   uint8_t note;
   uint8_t note_len;
   uint8_t prevNote;
-  uint8_t octave;
   uint8_t seq[16];
   uint8_t index;
 
 public:
+  uint8_t octave;
   NoteFunction(uint8_t channel, uint8_t every, uint8_t octave)
   {
     this->channel = channel;
@@ -40,7 +40,9 @@ public:
   {
     if (appState->pulses % this->every == 0) {
       // this->note_len--;
-      setIndexPlaying();
+      if (!appState->optionMenu) {
+        setIndexPlaying();
+      }
       if (this->seq[this->index] == 1 /*&& this->note_len == 0*/) {
         this->note = getRandomNote();
         // this->note_len = lengths[getRandomNumber(0, 5)];

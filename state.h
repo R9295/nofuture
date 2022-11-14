@@ -31,7 +31,8 @@ public:
     this->pulses = 0;
     this->bars = 1;
   }
-  void toggleOptionMenu() {
+  void toggleOptionMenu()
+  {
     this->optionMenu = !this->optionMenu;
     if (this->optionMenu == true) {
       setTileColorRanged(0, 7, 5184848);

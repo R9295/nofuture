@@ -29,9 +29,18 @@ handleKeyPress(keyEvent evt)
     if (state.keysPressed[0] == true && state.keysPressed[15] == true) {
       state.toggleOptionMenu();
     }
+    if (state.optionMenu == true && key > 0 && key < 8) {
+      if (key + 1 != note1.octave) {
+        setTileColor(note1.octave - 1, 5184848);
+        note1.octave = key + 1;
+      }
+      setTileColor(note1.octave - 1, green);
+    }
   } else if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING) {
     uint8_t key = getIndexFromKey(evt.reg + 1);
     state.keysPressed[key] = false;
+  }
+  if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_RISING && state.optionMenu == true) {
   }
   return 0;
 }
@@ -67,7 +76,6 @@ loop()
   while (USBMIDI.available()) {
     u8 msg = USBMIDI.read();
     if (msg == CLOCK_MSG) {
-      Serial.println(state.optionMenu);
       state.pulse();
       note1.pulse(&state);
     } else if (msg == STOP_MSG) {
