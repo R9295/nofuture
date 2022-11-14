@@ -1,7 +1,8 @@
-#include <usbmidi.h>
 #include "midi.h"
-#include "state.h"
 #include "note_function.h"
+#include "state.h"
+#include "trellis.h"
+#include <usbmidi.h>
 
 /* BEGIN STATE DECLARATIONS */
 APPState st = { 0, 1, 0 };
@@ -17,12 +18,25 @@ private:
   uint8_t max_;
 };
 
+/* BEGIN GLOBALS */
 NoteFunction note1 = NoteFunction(1, 6, 2);
+/* END GLOBALS */
+
 void
 setup()
 {
   randomSeed(analogRead(0));
   Serial.begin(500000);
+  if (!trellis.begin()) {
+    Serial.println("Could not start trellis, check wiring?");
+    while (1)
+      delay(1);
+  } else {
+    Serial.println("NeoPixel Trellis started");
+  }
+  initTrellisAnimation();
+  delay(200);
+  clearBoard();
 }
 
 void
