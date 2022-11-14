@@ -15,7 +15,7 @@ private:
 
 /* BEGIN GLOBALS */
 AppState state = AppState();
-NoteFunction note1 = NoteFunction(1, 6, 4);
+NoteFunction note1 = NoteFunction(1, 6, 2);
 /* END GLOBALS */
 
 void

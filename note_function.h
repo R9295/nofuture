@@ -4,12 +4,14 @@
 #include <usbmidi.h>
 char notes[12][3] = { "c",  "c#", "d",  "d#", "e",  "f",
                       "f#", "g",  "g#", "a",  "a#", "b" };
+// uint8_t lengths[5] = {1, 2, 4, 6, 8};
 class NoteFunction
 {
 private:
   uint8_t channel;
   uint8_t every;
   uint8_t note;
+  uint8_t note_len;
   uint8_t prevNote;
   uint8_t octave;
   uint8_t seq[16];
@@ -21,6 +23,7 @@ public:
     this->channel = channel;
     this->every = every;
     this->note = 0;
+    // this->note_len = 1;
     this->prevNote = 0;
     for (uint8_t i = 0; i < 16; i++) {
       this->seq[i] = 1;
@@ -31,8 +34,11 @@ public:
   void pulse(AppState* appState)
   {
     if (appState->pulses % this->every == 0) {
-      if (this->seq[this->index] == 1) {
+      // this->note_len--;
+      if (this->seq[this->index] == 1 /*&& this->note_len == 0*/) {
         this->note = getRandomNote();
+        // this->note_len = lengths[getRandomNumber(0, 5)];
+        // Serial.println(note_len);
         sendNoteOff(this->channel, this->prevNote);
         sendNoteOn(this->channel, this->note, 127);
         this->prevNote = this->note;
@@ -108,7 +114,7 @@ public:
           break;
       }
     }
-    Serial.println(octave);
+    //    Serial.println(octave);
     return base + (12 * octave);
   }
   uint8_t getNoteOn()
