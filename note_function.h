@@ -3,7 +3,7 @@
 #include "state.h"
 #include "trellis.h"
 #include <usbmidi.h>
-uint8_t lengths[5] = {1, 2, 4, 8};
+uint8_t lengths[5] = { 1, 2, 4, 8 };
 class NoteFunction
 {
 private:
@@ -31,7 +31,8 @@ public:
     }
     this->octave = octave;
   }
-  void toggleMagic() {
+  void toggleMagic()
+  {
     this->note_len = 1;
     this->has_magic = !this->has_magic;
   }
@@ -57,13 +58,14 @@ public:
         setIndexPlaying();
       }
       if (this->seq[this->index] == 1) {
-        if (this->has_magic == false || (this->has_magic == true && this->note_len == 0)){
-        this->note = getRandomNote();
-        this->note_len = lengths[getRandomNumber(0, 5)];
-        sendNoteOff(this->channel, this->prevNote);
-        sendNoteOn(this->channel, this->note, 127);
-        this->prevNote = this->note;
-      }
+        if (this->has_magic == false ||
+            (this->has_magic == true && this->note_len == 0)) {
+          this->note = getRandomNote();
+          this->note_len = lengths[getRandomNumber(0, 5)];
+          sendNoteOff(this->channel, this->prevNote);
+          sendNoteOn(this->channel, this->note, 127);
+          this->prevNote = this->note;
+        }
       }
       if (this->index == 15) {
         this->index = 0;

@@ -47,7 +47,7 @@ handleKeyPress(keyEvent evt)
       } else {
         setTileColor(12, 13269299);
       }
-      } else if (state.optionMenu == false) {
+    } else if (state.optionMenu == false) {
       note1.toggleKey(key);
     }
   } else if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING) {

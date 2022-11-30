@@ -54,58 +54,7 @@ Wheel(byte WheelPos)
 uint8_t
 getIndexFromKey(uint8_t value)
 {
-  uint8_t index = 0;
-  switch (value) {
-    case 3:
-      index = 0;
-      break;
-    case 7:
-      index = 1;
-      break;
-    case 11:
-      index = 2;
-      break;
-    case 15:
-      index = 3;
-      break;
-    case 19:
-      index = 4;
-      break;
-    case 23:
-      index = 5;
-      break;
-    case 27:
-      index = 6;
-      break;
-    case 31:
-      index = 7;
-      break;
-    case 35:
-      index = 8;
-      break;
-    case 39:
-      index = 9;
-      break;
-    case 43:
-      index = 10;
-      break;
-    case 47:
-      index = 11;
-      break;
-    case 51:
-      index = 12;
-      break;
-    case 55:
-      index = 13;
-      break;
-    case 59:
-      index = 14;
-      break;
-    case 63:
-      index = 15;
-      break;
-  }
-  return index;
+  return value == 3 ? 0 : (value - 3) / 4
 }
 
 void
