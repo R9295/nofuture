@@ -3,8 +3,6 @@
 #include "state.h"
 #include "trellis.h"
 #include <usbmidi.h>
-char notes[12][3] = { "c",  "c#", "d",  "d#", "e",  "f",
-                      "f#", "g",  "g#", "a",  "a#", "b" };
 uint8_t lengths[5] = {1, 2, 4, 8};
 class NoteFunction
 {
@@ -90,9 +88,10 @@ public:
   {
     uint8_t plusOneOctave =
       random(this->octave, this->octave == 8 ? 8 : this->octave + 2);
-    return getNote(plusOneOctave, notes[getRandomNumber(0, 12)]);
+    // 12 notes per octave
+    return getNote(plusOneOctave, getRandomNumber(0, 12));
   }
-  uint8_t getNote(uint8_t octave, char* note)
+  uint8_t getNote(uint8_t octave, uint8_t note)
   {
     /*
       So this is where it gets interesting. If "middle C" is defined as C3,
@@ -102,51 +101,7 @@ public:
       Ableton uses C4 AFAIK, so let's assume that for now. Make this a setting
       later.
     */
-    uint8_t base = 0;
-    if (*(note + 1) == '\0') {
-      switch (*note) {
-        case 'c':
-          break;
-        case 'd':
-          base = 2;
-          break;
-        case 'e':
-          base = 4;
-          break;
-        case 'f':
-          base = 5;
-          break;
-        case 'g':
-          base = 7;
-          break;
-        case 'a':
-          base = 9;
-          break;
-        case 'b':
-          base = 11;
-          break;
-      }
-    } else {
-      switch (*note) {
-        case 'c':
-          base = 1;
-          break;
-        case 'd':
-          base = 3;
-          break;
-        case 'f':
-          base = 6;
-          break;
-        case 'g':
-          base = 8;
-          break;
-        case 'a':
-          base = 10;
-          break;
-      }
-    }
-    //    Serial.println(octave);
-    return base + (12 * octave);
+    return note + (12 * octave);
   }
   uint8_t getNoteOn()
   {
