@@ -40,7 +40,14 @@ handleKeyPress(keyEvent evt)
         note1.octave = key + 1;
       }
       setTileColor(note1.octave - 1, green);
-    } else if (state.optionMenu == false) {
+    } else if (state.optionMenu == true && key == 12) {
+      note1.toggleMagic();
+      if (note1.has_magic == true) {
+        setTileColor(12, 502693);
+      } else {
+        setTileColor(12, 13269299);
+      }
+      } else if (state.optionMenu == false) {
       note1.toggleKey(key);
     }
   } else if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_FALLING) {

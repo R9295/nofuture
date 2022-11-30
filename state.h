@@ -36,7 +36,9 @@ public:
     this->optionMenu = !this->optionMenu;
     if (this->optionMenu == true) {
       setTileColorRanged(0, 7, 5184848);
-      setTileColorRanged(8, 15, 13269299);
+      setTileColorRanged(8, 11, 0x000000);
+      setTileColor(12, 13269299);
+      setTileColorRanged(13, 15, 0x000000);
     }
   }
 };

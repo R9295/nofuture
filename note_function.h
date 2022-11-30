@@ -5,7 +5,7 @@
 #include <usbmidi.h>
 char notes[12][3] = { "c",  "c#", "d",  "d#", "e",  "f",
                       "f#", "g",  "g#", "a",  "a#", "b" };
-// uint8_t lengths[5] = {1, 2, 4, 6, 8};
+uint8_t lengths[5] = {1, 2, 4, 8};
 class NoteFunction
 {
 private:
@@ -19,17 +19,23 @@ private:
 
 public:
   uint8_t octave;
+  bool has_magic;
   NoteFunction(uint8_t channel, uint8_t every, uint8_t octave)
   {
     this->channel = channel;
     this->every = every;
     this->note = 0;
-    // this->note_len = 1;
+    this->has_magic = false;
+    this->note_len = 1;
     this->prevNote = 0;
     for (uint8_t i = 0; i < 16; i++) {
       this->seq[i] = 1;
     }
     this->octave = octave;
+  }
+  void toggleMagic() {
+    this->note_len = 1;
+    this->has_magic = !this->has_magic;
   }
   void toggleOptionMenu()
   {
@@ -46,17 +52,20 @@ public:
   void pulse(AppState* appState)
   {
     if (appState->pulses % this->every == 0) {
-      // this->note_len--;
+      if (this->note_len != 0) {
+        this->note_len--;
+      }
       if (!appState->optionMenu) {
         setIndexPlaying();
       }
-      if (this->seq[this->index] == 1 /*&& this->note_len == 0*/) {
+      if (this->seq[this->index] == 1) {
+        if (this->has_magic == false || (this->has_magic == true && this->note_len == 0)){
         this->note = getRandomNote();
-        // this->note_len = lengths[getRandomNumber(0, 5)];
-        // Serial.println(note_len);
+        this->note_len = lengths[getRandomNumber(0, 5)];
         sendNoteOff(this->channel, this->prevNote);
         sendNoteOn(this->channel, this->note, 127);
         this->prevNote = this->note;
+      }
       }
       if (this->index == 15) {
         this->index = 0;
